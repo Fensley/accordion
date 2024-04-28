@@ -1,5 +1,5 @@
 import "./App.css";
-
+import { useState } from "react";
 const faqs = [
   {
     title: "Where are these chairs assembled?",
@@ -17,13 +17,33 @@ const faqs = [
 function App() {
   return (
     <div>
-      <Accordion />
+      <Accordion data={faqs} />
     </div>
   );
 }
 
-function Accordion() {
-  return <div>TODO</div>;
+function Accordion({ data }) {
+  return (
+    <div className="accordion">
+      {data.map((el, i) => (
+        <AccordionItem num={i} title={el.title} text={el.text} key={el.title} />
+      ))}
+    </div>
+  );
+}
+function AccordionItem({ num, title, text }) {
+  const [isopen, setIsOpen] = useState(false);
+  function handleclick() {
+    setIsOpen((isopen) => !isopen);
+  }
+  return (
+    <div className={isopen ? "open item " : "item "} onClick={handleclick}>
+      <p className="number">{num < 9 ? `0${num + 1}` : num + 1}</p>
+      <p className="title">{title}</p>
+      <p className="icon">{isopen ? "-" : "+"}</p>
+      {isopen && <div className="content-box ">{text}</div>}
+    </div>
+  );
 }
 
 export default App;
